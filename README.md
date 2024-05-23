@@ -82,3 +82,7 @@ project-root/
 ├── package-lock.json
 └── tsconfig.json
 ```
+
+## Screenshots Input and Output
+
+![alt text](image-1.png)

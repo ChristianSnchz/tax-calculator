@@ -46,6 +46,8 @@ const isExempt = (name) => {
 /**
  * @param amount
  * @returns  The amount rounded up to the nearest 0.05
+ * @description This function rounds up to the nearest 0.05 by multiplying
+ * the amount by 20, rounding it up to the nearest integer, and then dividing it by 20.
  */
 const roundUpToNearestFiveCents = (amount) => {
     return Math.ceil(amount * 20) / 20;
@@ -82,9 +84,10 @@ const calculateItemFinalPrice = (item) => {
     const basicSalesTax = calculateBasicSalesTax(item.price, isExempt(item.name));
     const importDuty = calculateImportDuty(item.price, item.imported);
     const finalPrice = (item.price + basicSalesTax + importDuty) * item.quantity;
+    const taxes = basicSalesTax + importDuty * item.quantity;
     return {
         finalPrice: finalPrice,
-        taxes: basicSalesTax + importDuty * item.quantity,
+        taxes: taxes,
         quantity: item.quantity,
     };
 };
@@ -111,6 +114,11 @@ const generateReceipt = (items) => {
  *
  * @param input
  * @returns  The items from the input string
+ * @description Regex explanation:
+ * - (\d+): captures the quantity of the item
+ * - (.*?): captures the name of the item
+ * - (?:\s(?:at|:)\s): non-capturing group that matches the word "at" or ":" surrounded by spaces
+ * - (\d+\.\d{2}): captures the price of the item
  */
 const buildItemsFromInput = (input) => {
     const lines = input
@@ -146,9 +154,6 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
 });
-const getUserInput = (query) => {
-    return new Promise((resolve) => rl.question(query, resolve));
-};
 /**
  * @description  Main function
  * @returns  The receipt for the items
