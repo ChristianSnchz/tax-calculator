@@ -82,5 +82,3 @@ project-root/
 ├── package-lock.json
 └── tsconfig.json
 ```
-
-## File Structure
